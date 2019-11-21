@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     width="40px" height="40px" viewBox="0 0 40 40"
+>
+    <title>pluginIcon</title>
+    <g id="pluginIcon">
+        <text id="Kotlin" fill="#FF9900" font-family="Roboto-Medium, Roboto" font-size="15" font-weight="400">
+            <tspan x="0" y="20">Kotlin</tspan>
+        </text>
+        <text id="ize" fill="#FF9900" font-family="Roboto-Medium, Roboto" font-size="14" font-weight="400">
+            <tspan x="0" y="32">ize</tspan>
+        </text>
+        <text id="PR" fill="#FF9900" font-family="Roboto-Medium, Roboto" font-size="14" font-weight="400">
+            <tspan x="21" y="32">PR</tspan>
+        </text>
+    </g>
+</svg>

@@ -1,0 +1,37 @@
+<idea-plugin url="https://github.com/wada811/kotlinize-pr-plugin">
+    <id>com.wada811.kotlinizepr.kotlinize-pr-plugin</id>
+    <name>Kotlinize PR</name>
+    <vendor email="at.wada811@gmail.com" url="http://github.com/wada811">wada811</vendor>
+
+    <description><![CDATA[
+    Convert Java File to Kotlin File and Create Pull Request on GitHub.
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products -->
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>org.jetbrains.kotlin</depends>
+    <depends>org.jetbrains.plugins.github</depends>
+    <depends>Git4Idea</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action class="com.wada811.kotlinizepr.action.KotlinizeAction"
+                id="KotlinizeAction"
+                text="Kotlinize">
+
+            <add-to-group group-id="CodeMenu"
+                          relative-to-action="ConvertJavaToKotlin"
+                          anchor="after"/>
+
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="ctrl alt K"/>
+        </action>
+    </actions>
+</idea-plugin>
