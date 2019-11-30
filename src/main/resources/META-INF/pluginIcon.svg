@@ -5,7 +5,8 @@
 >
     <title>pluginIcon</title>
     <g id="pluginIcon">
-        <text id="Kotlin" fill="#FF9900" font-family="Roboto-Medium, Roboto" font-size="15" font-weight="400">
+        <rect id="background" fill="#3380CC" x="0" y="0" width="40" height="40"/>
+        <text id="Kotlin" fill="#FF9900" font-family="Roboto-Medium, Roboto" font-size="14.5" font-weight="400">
             <tspan x="0" y="20">Kotlin</tspan>
         </text>
         <text id="ize" fill="#FF9900" font-family="Roboto-Medium, Roboto" font-size="14" font-weight="400">
