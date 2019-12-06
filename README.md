@@ -6,6 +6,15 @@ Kotlinize PR is IntelliJ IDEA Plugin that convert java file to kotlin file and c
 # How to use
 
 # How to install
+1. Open Preferences
+2. Select Plugins menu
+3. Select Marketplace tab
+4. Type "Kotlinize PR"
+5. Select "Kotlinize PR"
+6. Click "Install" button
+7. Click "Restart IDE" button
+
+![https://github.com/wada811/kotlinize-pr-plugin/blob/master/doc/how_to_install.gif?raw=true](https://github.com/wada811/kotlinize-pr-plugin/blob/master/doc/how_to_install.gif?raw=true)
 
 # License
 ```
