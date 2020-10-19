@@ -7,11 +7,12 @@
     Convert Java File to Kotlin File and Create Pull Request on GitHub.
     ]]></description>
 
-    <idea-version since-build="191.*" />
+    <idea-version since-build="192.*" />
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <!-- uncomment to enable plugin in all products -->
+    <depends>com.intellij.modules.java</depends>
     <depends>com.intellij.modules.lang</depends>
     <depends>org.jetbrains.kotlin</depends>
     <depends>org.jetbrains.plugins.github</depends>
