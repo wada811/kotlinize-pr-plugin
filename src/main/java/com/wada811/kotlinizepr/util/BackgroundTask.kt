@@ -7,9 +7,9 @@ import com.intellij.openapi.progress.Task
 import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
 import com.intellij.openapi.project.Project
 
-object BackgroundableTask {
+object BackgroundTask {
     fun doBackgroundTask(project: Project, taskName: String, doOnAction: () -> Unit, doOnSuccess: () -> Unit) {
-        val backgroundableTask = object : Task.Backgroundable(
+        val backgroundTask = object : Task.Backgroundable(
             project,
             taskName,
             false,
@@ -24,7 +24,7 @@ object BackgroundableTask {
                 doOnSuccess()
             }
         }
-        val indicator = BackgroundableProcessIndicator(backgroundableTask)
-        ProgressManager.getInstance().runProcessWithProgressAsynchronously(backgroundableTask, indicator)
+        val indicator = BackgroundableProcessIndicator(backgroundTask)
+        ProgressManager.getInstance().runProcessWithProgressAsynchronously(backgroundTask, indicator)
     }
 }

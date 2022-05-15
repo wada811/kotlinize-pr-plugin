@@ -1,7 +1,6 @@
 package com.wada811.kotlinizepr.action
 
 import com.intellij.notification.Notification
-import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -9,7 +8,8 @@ import com.intellij.openapi.vcs.changes.Change
 import com.intellij.openapi.vcs.changes.CurrentContentRevision
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.vcsUtil.VcsUtil
-import com.wada811.kotlinizepr.util.BackgroundableTask.doBackgroundTask
+import com.wada811.kotlinizepr.notification.Notifications.notifyCreatePullRequest
+import com.wada811.kotlinizepr.util.BackgroundTask.doBackgroundTask
 import com.wada811.kotlinizepr.util.contentRevision
 import git4idea.util.GitFileUtils
 
@@ -23,9 +23,9 @@ class CommitAndPushAction(
         notification.hideBalloon()
         val project = e.project ?: return
         doBackgroundTask(
-            project,
-            "Commit and Push",
-            {
+            project = project,
+            taskName = "Commit and Push",
+            doOnAction = {
                 targetFiles.forEach { file ->
                     KotlinizeAction.logger.info("File `${file.name}` had kotlinize")
                     val before = beforeRevisions[file] ?: return@forEach
@@ -36,17 +36,10 @@ class CommitAndPushAction(
                     )
                 }
                 GitFileUtils.addFiles(project, VcsUtil.getVcsRootFor(project, targetFiles[0])!!, targetFiles)
-            }, {
+            },
+            doOnSuccess = {
                 ActionManager.getInstance().getAction(COMMIT_AND_PUSH_ACTION_ID)?.actionPerformed(e)
-
-                val notification = Notification(
-                    "Kotlinize PR",
-                    "Kotlinize PR",
-                    "",
-                    NotificationType.INFORMATION
-                )
-                notification.addAction(CreatePullRequestAction(notification))
-                    .notify(project)
+                project.notifyCreatePullRequest()
             }
         )
     }

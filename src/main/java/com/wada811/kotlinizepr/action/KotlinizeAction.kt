@@ -1,7 +1,5 @@
 package com.wada811.kotlinizepr.action
 
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -15,7 +13,8 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiManager
 import com.intellij.vcsUtil.VcsUtil
-import com.wada811.kotlinizepr.util.BackgroundableTask
+import com.wada811.kotlinizepr.notification.Notifications.notifyCommitAndPush
+import com.wada811.kotlinizepr.util.BackgroundTask
 import com.wada811.kotlinizepr.util.contentRevision
 import git4idea.GitUtil
 import git4idea.branch.GitBrancher
@@ -31,12 +30,12 @@ class KotlinizeAction : AnAction() {
         if (targetFiles.none()) {
             return
         }
-        checkoutNewBranch(project, "kotlinize/" + targetFiles.joinToString("-") { it.nameWithoutExtension.toLowerCase() })
+        checkoutNewBranch(project, "kotlinize/" + targetFiles.joinToString("-") { it.nameWithoutExtension.lowercase() })
         val filesLatch = CountDownLatch(targetFiles.size)
-        BackgroundableTask.doBackgroundTask(
-            project,
-            "Rename files",
-            {
+        BackgroundTask.doBackgroundTask(
+            project = project,
+            taskName = "Rename files",
+            doOnAction = {
                 targetFiles.forEach { file ->
                     val fileLatch = CountDownLatch(1)
                     logger.info("KotlinizeAction: ${file.path}")
@@ -50,7 +49,7 @@ class KotlinizeAction : AnAction() {
                         logger.info("File `${file.name}` rename to kt")
                         file.rename(this, file.nameWithoutExtension + ".kt")
                         val after = file.contentRevision()
-                        BackgroundableTask.doBackgroundTask(
+                        BackgroundTask.doBackgroundTask(
                             project,
                             "Commit files",
                             {
@@ -72,17 +71,10 @@ class KotlinizeAction : AnAction() {
                 }
                 filesLatch.await()
             },
-            {
+            doOnSuccess = {
                 logger.info("Call: Convert Java File to Kotlin File")
                 ActionManager.getInstance().getAction(CONVERT_JAVA_TO_KOTLIN_PLUGIN_ID)?.actionPerformed(e)
-                val notification = Notification(
-                    "Kotlinize PR",
-                    "Kotlinize PR",
-                    "",
-                    NotificationType.INFORMATION
-                )
-                notification.addAction(CommitAndPushAction(notification, targetFiles, beforeRevisions))
-                    .notify(project)
+                project.notifyCommitAndPush(targetFiles, beforeRevisions)
             }
         )
     }

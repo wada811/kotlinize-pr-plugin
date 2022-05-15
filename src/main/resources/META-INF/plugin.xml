@@ -7,7 +7,7 @@
     Convert Java File to Kotlin File and Create Pull Request on GitHub.
     ]]></description>
 
-    <idea-version since-build="192.*" />
+    <idea-version since-build="192.*"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -15,11 +15,13 @@
     <depends>com.intellij.modules.java</depends>
     <depends>com.intellij.modules.lang</depends>
     <depends>org.jetbrains.kotlin</depends>
-    <depends>org.jetbrains.plugins.github</depends>
     <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <notificationGroup id="Kotlinize PR"
+                           displayType="BALLOON"
+                           key="notification.group.balloon"/>
     </extensions>
 
     <actions>
