@@ -100,7 +100,14 @@ class KotlinizeAction : AnAction() {
         manager: PsiManager = PsiManager.getInstance(project)
     ): Sequence<VirtualFile> {
         return files.asSequence()
-            .flatMap { if (it.isDirectory) selectedJavaFiles(project, it.children, manager) else sequenceOf(it) }
+            .flatMap { file ->
+                if (file.isDirectory) {
+                    @Suppress("UnsafeVfsRecursion")
+                    selectedJavaFiles(project, file.children, manager)
+                } else {
+                    sequenceOf(file)
+                }
+            }
             .filter { it.isWritable }
             .map { manager.findFile(it) }
             .filterIsInstance<PsiJavaFile>()
