@@ -28,11 +28,21 @@ class CreatePullRequestAction(
             project,
             "Commit files",
             {
-                GitFileUtils.addFiles(project, rootFile, listOf(rootFile))
-                val change = ChangeListManager.getInstance(project).getChange(rootFile)
-                KotlinizeAction.logger.info("change: $change")
+                fun List<VirtualFile>.findChildren(): List<VirtualFile> {
+                    return flatMap {
+                        if (it.isDirectory) {
+                            it.children.toList().findChildren()
+                        } else {
+                            listOf(it)
+                        }
+                    }
+                }
+                val files = rootFile.children.toList().findChildren()
+                GitFileUtils.addFiles(project, rootFile, files)
+                val changes = files.map { ChangeListManager.getInstance(project).getChange(it) }
+                KotlinizeAction.logger.info("changes: $changes")
                 VcsUtil.getVcsFor(project, rootFile)?.checkinEnvironment?.commit(
-                    listOf(change),
+                    changes,
                     "Kotlinize more better"
                 )
             }, {
