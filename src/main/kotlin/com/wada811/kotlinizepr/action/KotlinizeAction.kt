@@ -18,7 +18,6 @@ import com.wada811.kotlinizepr.util.BackgroundTask
 import com.wada811.kotlinizepr.util.contentRevision
 import git4idea.GitUtil
 import git4idea.branch.GitBrancher
-import git4idea.util.GitFileUtils
 import java.util.concurrent.CountDownLatch
 
 class KotlinizeAction : AnAction() {
@@ -88,10 +87,9 @@ class KotlinizeAction : AnAction() {
                                 "Kotlinize ${file.nameWithoutExtension}"
                             )
                         }
-//                        GitFileUtils.addFiles(project, VcsUtil.getVcsRootFor(project, targetFiles[0])!!, targetFiles)
                     },
                     doOnSuccess = {
-                        project.notifyCreatePullRequest()
+                        project.notifyCreatePullRequest(files)
                     }
                 )
             }
