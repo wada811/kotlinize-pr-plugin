@@ -92,8 +92,6 @@ class KotlinizeAction : AnAction() {
                         GitFileUtils.addFiles(project, VcsUtil.getVcsRootFor(project, targetFiles[0])!!, targetFiles)
                     },
                     doOnSuccess = {
-//                        ActionManager.getInstance().getAction(COMMIT_AND_PUSH_ACTION_ID)
-//                            ?.actionPerformed(e)
                         project.notifyCreatePullRequest()
                     }
                 )
@@ -145,6 +143,5 @@ class KotlinizeAction : AnAction() {
     companion object {
         val logger = Logger.getInstance(KotlinizeAction::class.java)
         private const val CONVERT_JAVA_TO_KOTLIN_PLUGIN_ID = "ConvertJavaToKotlin"
-        private const val COMMIT_AND_PUSH_ACTION_ID = "Vcs.Push"
     }
 }
