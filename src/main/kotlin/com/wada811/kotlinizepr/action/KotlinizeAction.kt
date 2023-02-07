@@ -14,10 +14,12 @@ import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiManager
 import com.intellij.vcsUtil.VcsUtil
 import com.wada811.kotlinizepr.notification.Notifications.notifyCommitAndPush
+import com.wada811.kotlinizepr.notification.Notifications.notifyCreatePullRequest
 import com.wada811.kotlinizepr.util.BackgroundTask
 import com.wada811.kotlinizepr.util.contentRevision
 import git4idea.GitUtil
 import git4idea.branch.GitBrancher
+import git4idea.util.GitFileUtils
 import java.util.concurrent.CountDownLatch
 
 class KotlinizeAction : AnAction() {
@@ -74,7 +76,27 @@ class KotlinizeAction : AnAction() {
             doOnSuccess = {
                 logger.info("Call: Convert Java File to Kotlin File")
                 ActionManager.getInstance().getAction(CONVERT_JAVA_TO_KOTLIN_PLUGIN_ID)?.actionPerformed(e)
-                project.notifyCommitAndPush(targetFiles, beforeRevisions)
+                BackgroundTask.doBackgroundTask(
+                    project = project,
+                    taskName = "Commit and Push",
+                    doOnAction = {
+                        targetFiles.forEach { file ->
+                            logger.info("File `${file.name}` had kotlinize")
+                            val before = beforeRevisions[file] ?: return@forEach
+                            val after = file.contentRevision()
+                            VcsUtil.getVcsFor(project, file)?.checkinEnvironment?.commit(
+                                listOf(Change(before, after)),
+                                "Kotlinize ${file.nameWithoutExtension}"
+                            )
+                        }
+                        GitFileUtils.addFiles(project, VcsUtil.getVcsRootFor(project, targetFiles[0])!!, targetFiles)
+                    },
+                    doOnSuccess = {
+//                        ActionManager.getInstance().getAction(COMMIT_AND_PUSH_ACTION_ID)
+//                            ?.actionPerformed(e)
+                        project.notifyCreatePullRequest()
+                    }
+                )
             }
         )
     }
@@ -123,5 +145,6 @@ class KotlinizeAction : AnAction() {
     companion object {
         val logger = Logger.getInstance(KotlinizeAction::class.java)
         private const val CONVERT_JAVA_TO_KOTLIN_PLUGIN_ID = "ConvertJavaToKotlin"
+        private const val COMMIT_AND_PUSH_ACTION_ID = "Vcs.Push"
     }
 }
