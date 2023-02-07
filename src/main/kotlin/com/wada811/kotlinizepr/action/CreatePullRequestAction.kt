@@ -20,25 +20,18 @@ class CreatePullRequestAction(
         notification.hideBalloon()
         val project = e.project ?: return
         val rootFile = VcsUtil.getVcsRootFor(project, files[0])!!
-        KotlinizeAction.logger.info("rootFile: ${rootFile.path}")
-        val childrenFiles = rootFile.children
-        KotlinizeAction.logger.info("childrenFiles: ${childrenFiles.map { it.name }}")
         BackgroundTask.doBackgroundTask(
             project,
             "Commit files",
             {
                 val files = ChangeListManager.getInstance(project).affectedFiles
-                KotlinizeAction.logger.info("files: $files")
                 GitFileUtils.addFiles(project, rootFile, files)
                 val changes = ChangeListManager.getInstance(project).getChangesIn(rootFile).toList()
-                KotlinizeAction.logger.info("changes: $changes")
-                GitFileUtils.addFiles(project, rootFile, files)
                 VcsUtil.getVcsFor(project, rootFile)?.checkinEnvironment?.commit(
                     changes,
                     "Kotlinize more better"
                 )
             }, {
-//                ActionManager.getInstance().getAction(PUSH_ACTION_ID)?.actionPerformed(e)
                 ActionManager.getInstance().getAction(CREATE_PULL_REQUEST_ACTION_ID)?.actionPerformed(e)
                 project.notifyCheckoutPreviousBranch()
             }
@@ -46,7 +39,6 @@ class CreatePullRequestAction(
     }
 
     companion object {
-        //        private const val PUSH_ACTION_ID = "Vcs.Push"
         private const val CREATE_PULL_REQUEST_ACTION_ID = "Github.Create.Pull.Request"
     }
 }
