@@ -30,13 +30,16 @@ class CreatePullRequestAction(
             {
                 fun List<VirtualFile>.findChildren(): List<VirtualFile> {
                     return flatMap {
-                        if (it.isDirectory) {
+                        if (it.isDirectory && !listOf(".git", ".idea", ".gradle", "build", "gradle").contains(it.name)) {
                             it.children.toList().findChildren()
-                        } else {
+                        } else if (it.path.contains("src") && VcsUtil.isFileUnderVcs(project, it.path)) {
                             listOf(it)
+                        } else {
+                            emptyList()
                         }
                     }
                 }
+
                 val files = rootFile.children.toList().findChildren()
                 GitFileUtils.addFiles(project, rootFile, files)
                 val changes = files.map { ChangeListManager.getInstance(project).getChange(it) }
