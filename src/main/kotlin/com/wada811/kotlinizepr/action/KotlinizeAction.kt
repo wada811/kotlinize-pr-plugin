@@ -13,7 +13,6 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiManager
 import com.intellij.vcsUtil.VcsUtil
-import com.wada811.kotlinizepr.notification.Notifications.notifyCommitAndPush
 import com.wada811.kotlinizepr.notification.Notifications.notifyCreatePullRequest
 import com.wada811.kotlinizepr.util.BackgroundTask
 import com.wada811.kotlinizepr.util.contentRevision
