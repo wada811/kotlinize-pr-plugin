@@ -6,7 +6,6 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.vcs.changes.ChangeListManager
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.vcs.commit.AmendCommitAware
 import com.intellij.vcsUtil.VcsUtil
 import com.wada811.kotlinizepr.notification.Notifications.notifyCheckoutPreviousBranch
 import com.wada811.kotlinizepr.util.BackgroundTask
@@ -28,25 +27,12 @@ class CreatePullRequestAction(
             project,
             "Commit files",
             {
-                fun List<VirtualFile>.findChildren(): List<VirtualFile> {
-                    return flatMap {
-                        if (it.isDirectory && !listOf(".git", ".idea", ".gradle", "build", "gradle").contains(it.name)) {
-                            it.children.toList().findChildren()
-                        } else if (it.path.contains("src") && VcsUtil.isFileUnderVcs(project, it.path)) {
-                            listOf(it)
-                        } else {
-                            emptyList()
-                        }
-                    }
-                }
-
                 val files = ChangeListManager.getInstance(project).affectedFiles
                 KotlinizeAction.logger.info("files: $files")
-                val changes = files.mapNotNull { ChangeListManager.getInstance(project).getChange(it) }
-                val changesIn = ChangeListManager.getInstance(project).getChangesIn(rootFile)
+                GitFileUtils.addFiles(project, rootFile, files)
+                val changes = ChangeListManager.getInstance(project).getChangesIn(rootFile).toList()
                 KotlinizeAction.logger.info("changes: $changes")
-                KotlinizeAction.logger.info("changesIn: $changesIn")
-//                GitFileUtils.addFiles(project, rootFile, files)
+                GitFileUtils.addFiles(project, rootFile, files)
                 VcsUtil.getVcsFor(project, rootFile)?.checkinEnvironment?.commit(
                     changes,
                     "Kotlinize more better"
