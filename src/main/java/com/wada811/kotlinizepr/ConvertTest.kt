@@ -1,8 +1,8 @@
-package com.wada811.kotlinizepr;
+package com.wada811.kotlinizepr
 
-public class ConvertTest {
-    public int mTestInt = 0;
-    String mTestString = "test";
-    protected Boolean mTestBoolean = false;
-    private final Long mTestLong = 1L;
+class ConvertTest {
+    var mTestInt = 0
+    var mTestString = "test"
+    protected var mTestBoolean = false
+    private val mTestLong = 1L
 }
