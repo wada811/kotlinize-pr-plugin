@@ -3,8 +3,6 @@ package com.wada811.kotlinizepr.notification
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vcs.changes.CurrentContentRevision
-import com.intellij.openapi.vfs.VirtualFile
 import com.wada811.kotlinizepr.action.CheckoutPreviousBranchAction
 import com.wada811.kotlinizepr.action.CreatePullRequestAction
 

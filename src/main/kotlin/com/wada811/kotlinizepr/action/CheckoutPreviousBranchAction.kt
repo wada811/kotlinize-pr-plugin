@@ -9,9 +9,9 @@ import git4idea.branch.GitBrancher
 
 class CheckoutPreviousBranchAction(
     private val notification: Notification
-) : AnAction("Commit and Push") {
+) : AnAction("Checkout Previous Branch") {
     override fun actionPerformed(e: AnActionEvent) {
-        KotlinizeAction.logger.info("Checkout previous branch")
+        KotlinizeAction.logger.info("Checkout Previous Branch")
         notification.hideBalloon()
         val project = e.project ?: return
         checkoutPreviousBranch(project)

@@ -77,7 +77,7 @@ class KotlinizeAction : AnAction() {
                 ActionManager.getInstance().getAction(CONVERT_JAVA_TO_KOTLIN_PLUGIN_ID)?.actionPerformed(e)
                 BackgroundTask.doBackgroundTask(
                     project = project,
-                    taskName = "Commit and Push",
+                    taskName = "Commit files",
                     doOnAction = {
                         targetFiles.forEach { file ->
                             logger.info("File `${file.name}` had kotlinize")
@@ -88,7 +88,7 @@ class KotlinizeAction : AnAction() {
                                 "Kotlinize ${file.nameWithoutExtension}"
                             )
                         }
-                        GitFileUtils.addFiles(project, VcsUtil.getVcsRootFor(project, targetFiles[0])!!, targetFiles)
+//                        GitFileUtils.addFiles(project, VcsUtil.getVcsRootFor(project, targetFiles[0])!!, targetFiles)
                     },
                     doOnSuccess = {
                         project.notifyCreatePullRequest()
