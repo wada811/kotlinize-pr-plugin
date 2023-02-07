@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.wada811.kotlinizepr"
-version = "1.0.6"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -34,6 +34,7 @@ tasks {
         sinceBuild.set("221")
         untilBuild.set("231.*")
         changeNotes.set("""
+            1.1.0: Kotlinize more better<br>
             1.0.6: Fix compatibility for Android Studio Flamingo<br>
             1.0.5: Make available for Android Studio Chipmunk<br>
             1.0.4: Fix plugin compatibility<br>
