@@ -40,11 +40,13 @@ class CreatePullRequestAction(
                     }
                 }
 
-                val files = rootFile.children.toList().findChildren()
+                val files = ChangeListManager.getInstance(project).affectedFiles
                 KotlinizeAction.logger.info("files: $files")
-                GitFileUtils.addFiles(project, rootFile, files)
                 val changes = files.mapNotNull { ChangeListManager.getInstance(project).getChange(it) }
+                val changesIn = ChangeListManager.getInstance(project).getChangesIn(rootFile)
                 KotlinizeAction.logger.info("changes: $changes")
+                KotlinizeAction.logger.info("changesIn: $changesIn")
+//                GitFileUtils.addFiles(project, rootFile, files)
                 VcsUtil.getVcsFor(project, rootFile)?.checkinEnvironment?.commit(
                     changes,
                     "Kotlinize more better"
